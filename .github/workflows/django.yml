@@ -13,7 +13,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: [3.7]
 
     steps:
     - uses: actions/checkout@v3
@@ -28,3 +28,12 @@ jobs:
     - name: Run Tests
       run: |
         python manage.py test
+        
+    - name: Build Docker Image
+      run: |
+        docker build -t $IMAGE_NAME .
+
+    - name: Push to Github Container Registry
+      uses: docker/push-action@v1
+      with:
+        tags: $IMAGE_NAME
